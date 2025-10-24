@@ -1,6 +1,6 @@
 # Rebirth
+![Alt](https://repobeats.axiom.co/api/embed/746196d04071dda8fd1fba0767a93823e22e37d9.svg "Repobeats analytics image")  
 *代号: 重生*  
-![Alt](https://repobeats.axiom.co/api/embed/746196d04071dda8fd1fba0767a93823e22e37d9.svg "Repobeats analytics image")
 一个目标复活远古的**Minecraft inf-20100618**版本的项目，增加现代的功能和内容。  
 该项目不依靠MCP建立，为作者直接反编译发布版后手动进行反混淆，参考MCP919 Mapping，工程量很大，还有很多没弄完。  
 本改版主要集中于优化性能、增加现代Minecraft的功能和内容，开发日志在作者B站发布。  
