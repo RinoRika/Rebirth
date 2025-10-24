@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MCPINFDEV">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/MCPINFDEV.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
