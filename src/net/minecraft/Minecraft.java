@@ -759,8 +759,10 @@ public abstract class Minecraft implements Runnable {
                 this.theWorld.randomDisplayUpdates(MathHelper.floor_double(this.thePlayer.posX), MathHelper.floor_double(this.thePlayer.posY), MathHelper.floor_double(this.thePlayer.posZ));
                 this.effectRenderer.updateEffects();
             }
-            this.theWorld.setWorldTime(0);
-            this.theWorld.setRaining(true);
+            if (MinecraftRunner.debug) {
+                this.theWorld.setWorldTime(0);
+                this.theWorld.setRaining(true);
+            }
         }
         this.systemTime = System.currentTimeMillis();
     }

@@ -14,7 +14,7 @@ import org.apache.logging.log4j.LogManager;
 public class MinecraftRunner {
     // Access minecraft here or through Minecraft.getMinecraft().
     public static Minecraft minecraft;
-    private static Thread mainThread;
+    public final static boolean debug = true;
 
     public static void main(String[] args) {
         LogManager.getLogger().info("=== Stars: We are starting here... ===");
