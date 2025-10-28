@@ -9,7 +9,6 @@ public class TimerHackThread extends Thread {
         super(string);
         this.mc = mc;
         this.setDaemon(true);
-        this.start();
     }
 
     @Override

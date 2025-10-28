@@ -71,7 +71,7 @@ public class CraftingManager {
                 s.append(s3);
             }
         }
-        final HashMap hashMap = new HashMap<>();
+        final HashMap<Character, Integer> hashMap = new HashMap<>();
         while (i < arr.length) {
             final Character c = (Character) arr[i];
             int k = 0;

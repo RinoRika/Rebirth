@@ -3,7 +3,7 @@ package net.minecraft;
 
 public class Timer {
 
-    float tps;
+    public float timerSpeed;
     private double f;
     public int elapsedTicks;
     public float renderPartialTicks;
@@ -13,11 +13,11 @@ public class Timer {
     private long lastHRClock;
     private double adjustment;
 
-    public Timer(final float tps) {
+    public Timer(final float timerSpeed) {
         this.speed = 1.0f;
         this.elapsedDelta = 0.0f;
         this.adjustment = 1.0;
-        this.tps = tps;
+        this.timerSpeed = timerSpeed;
         this.lastSysClock = System.currentTimeMillis();
         this.lastHRClock = System.nanoTime() / 1000000L;
     }
@@ -45,7 +45,7 @@ public class Timer {
         if (n3 > 1.0) {
             n3 = 1.0;
         }
-        this.elapsedDelta += (float) (n3 * this.speed * this.tps);
+        this.elapsedDelta += (float) (n3 * this.speed * this.timerSpeed);
         this.elapsedTicks = (int) this.elapsedDelta;
         this.elapsedDelta -= this.elapsedTicks;
         if (this.elapsedTicks > 10) {

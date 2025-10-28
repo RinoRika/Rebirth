@@ -21,7 +21,6 @@ import net.minecraft.client.input.MouseHelper;
 import net.minecraft.client.input.MovementInputFromOptions;
 import net.minecraft.client.input.MovingObjectPosition;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.texture.TextureFlamesFX;
@@ -82,7 +81,6 @@ public abstract class Minecraft implements Runnable {
     public int rightClickDelayTimer;
     public GuiIngame ingameGUI;
     public boolean skipRenderWorld;
-    public ModelBiped field_9242_w;
     public MovingObjectPosition objectMouseOver;
     public GameSettings gameSettings;
     public SoundManager sndManager;
@@ -118,7 +116,6 @@ public abstract class Minecraft implements Runnable {
         this.objectMouseOverString = null;
         this.rightClickDelayTimer = 0;
         this.skipRenderWorld = false;
-        this.field_9242_w = new ModelBiped(0.0f);
         this.objectMouseOver = null;
         this.sndManager = new SoundManager();
         this.textureWaterFX = new TextureWaterFX();
@@ -132,7 +129,7 @@ public abstract class Minecraft implements Runnable {
         this.tempDisplayWidth = integer4;
         this.tempDisplayHeight = integer5;
         this.fullscreen = boolean6;
-        new TimerHackThread(this, "Timer hack thread");
+        new TimerHackThread(this, "Timer hack thread").start();
         this.displayWidth = integer4;
         this.displayHeight = integer5;
         this.fullscreen = boolean6;
@@ -729,11 +726,11 @@ public abstract class Minecraft implements Runnable {
                 }
             }
             if (this.currentScreen == null) {
-                if (Mouse.isButtonDown(0) && this.ticksRan - this.mouseTicksRan >= this.timer.tps / 4.0f && this.inGameHasFocus) {
+                if (Mouse.isButtonDown(0) && this.ticksRan - this.mouseTicksRan >= this.timer.timerSpeed / 4.0f && this.inGameHasFocus) {
                     this.clickMouse(0);
                     this.mouseTicksRan = this.ticksRan;
                 }
-                if (Mouse.isButtonDown(1) && this.ticksRan - this.mouseTicksRan >= this.timer.tps / 4.0f && this.inGameHasFocus) {
+                if (Mouse.isButtonDown(1) && this.ticksRan - this.mouseTicksRan >= this.timer.timerSpeed / 4.0f && this.inGameHasFocus) {
                     this.clickMouse(1);
                     this.mouseTicksRan = this.ticksRan;
                 }

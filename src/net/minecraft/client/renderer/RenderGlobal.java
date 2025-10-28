@@ -2,12 +2,8 @@
 package net.minecraft.client.renderer;
 
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
 import net.minecraft.Minecraft;
 import net.minecraft.block.Block;
 import net.minecraft.client.input.MovingObjectPosition;
@@ -41,7 +37,7 @@ public class RenderGlobal implements IWorldAccess {
     public List a;
     private World world;
     private RenderEngine renderEngine;
-    private List m;
+    private List<WorldRenderer> m;
     private WorldRenderer[] n;
     private WorldRenderer[] o;
     private int p;
@@ -760,7 +756,7 @@ public class RenderGlobal implements IWorldAccess {
         GL11.glEnable(2884);
     }
 
-    public boolean updateRenderers(final EntityPlayer gi, final boolean boolean2) {
+    public void updateRenderers(final EntityPlayer gi, final boolean boolean2) {
         this.m.sort(new RenderSorter(gi));
         final int n = this.m.size() - 1;
         for (int size = this.m.size(), i = 0; i < size; ++i) {
@@ -769,10 +765,10 @@ public class RenderGlobal implements IWorldAccess {
                 if (worldRenderer.chunkIndex(gi) > 1024.0f) {
                     if (worldRenderer.isInFrustum) {
                         if (i >= 3) {
-                            return false;
+                            return;
                         }
                     } else if (i >= 1) {
-                        return false;
+                        return;
                     }
                 }
             } else if (!worldRenderer.isInFrustum) {
@@ -782,7 +778,6 @@ public class RenderGlobal implements IWorldAccess {
             this.m.remove(worldRenderer);
             worldRenderer.u = false;
         }
-        return this.m.isEmpty();
     }
 
     public void drawBlockBreaking(final EntityPlayer gi, final MovingObjectPosition hb, final int integer, final ItemStack hw, final float float5) {
@@ -823,27 +818,6 @@ public class RenderGlobal implements IWorldAccess {
             GL11.glColor4f(n2, n2, n2, MathHelper.sin(System.currentTimeMillis() / 200.0f) * 0.2f + 0.5f);
             final int n = this.renderEngine.getTexture("/terrain.png");
             GlStateManager.bindTexture(n);
-            int blockX = hb.blockX;
-            int blockY = hb.blockY;
-            int blockZ = hb.blockZ;
-            if (hb.sideHit == 0) {
-                --blockY;
-            }
-            if (hb.sideHit == 1) {
-                ++blockY;
-            }
-            if (hb.sideHit == 2) {
-                --blockZ;
-            }
-            if (hb.sideHit == 3) {
-                ++blockZ;
-            }
-            if (hb.sideHit == 4) {
-                --blockX;
-            }
-            if (hb.sideHit == 5) {
-                ++blockX;
-            }
         }
         GL11.glDisable(3042);
         GL11.glDisable(3008);
@@ -956,20 +930,28 @@ public class RenderGlobal implements IWorldAccess {
         if (n * n + n2 * n2 + n3 * n3 > 256.0) {
             return;
         }
-        if (particle == "bubble") {
-            this.mc.effectRenderer.addEffect(new EntityBubbleFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock, xPosition, yPosition, zPosition));
-        } else if (particle == "smoke") {
-            this.mc.effectRenderer.addEffect(new EntitySmokeFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock));
-        } else if (particle == "explode") {
-            this.mc.effectRenderer.addEffect(new EntityExplodeFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock, xPosition, yPosition, zPosition));
-        } else if (particle == "flame") {
-            this.mc.effectRenderer.addEffect(new EntityFlameFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock, xPosition, yPosition, zPosition));
-        } else if (particle == "lava") {
-            this.mc.effectRenderer.addEffect(new EntityLavaFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock));
-        } else if (particle == "splash") {
-            this.mc.effectRenderer.addEffect(new EntitySplashFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock, xPosition, yPosition, zPosition));
-        } else if (particle == "largesmoke") {
-            this.mc.effectRenderer.addEffect(new EntitySmokeFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock, 2.5f));
+        switch (particle) {
+            case "bubble":
+                this.mc.effectRenderer.addEffect(new EntityBubbleFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock, xPosition, yPosition, zPosition));
+                break;
+            case "smoke":
+                this.mc.effectRenderer.addEffect(new EntitySmokeFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock));
+                break;
+            case "explode":
+                this.mc.effectRenderer.addEffect(new EntityExplodeFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock, xPosition, yPosition, zPosition));
+                break;
+            case "flame":
+                this.mc.effectRenderer.addEffect(new EntityFlameFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock, xPosition, yPosition, zPosition));
+                break;
+            case "lava":
+                this.mc.effectRenderer.addEffect(new EntityLavaFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock));
+                break;
+            case "splash":
+                this.mc.effectRenderer.addEffect(new EntitySplashFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock, xPosition, yPosition, zPosition));
+                break;
+            case "largesmoke":
+                this.mc.effectRenderer.addEffect(new EntitySmokeFX(this.world, xCoordBlock, yCoordBlock, zCoordBlock, 2.5f));
+                break;
         }
     }
 
@@ -986,12 +968,12 @@ public class RenderGlobal implements IWorldAccess {
     }
 
     public void updateAllRenderers() {
-        for (int i = 0; i < this.o.length; ++i) {
-            if (this.o[i].A) {
-                if (!this.o[i].u) {
-                    this.m.add(this.o[i]);
+        for (WorldRenderer worldRenderer : this.o) {
+            if (worldRenderer.A) {
+                if (!worldRenderer.u) {
+                    this.m.add(worldRenderer);
                 }
-                this.o[i].f();
+                worldRenderer.f();
             }
         }
     }
